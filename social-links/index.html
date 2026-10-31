@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Мои соцсети</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <!-- Фон -->
+  <div class="bg" id="bg" aria-hidden="true"><video id="bgVideo" class="bg-video" autoplay muted loop playsinline preload="auto" poster="background.jpg"></video><i class="orb o1"></i><i class="orb o2"></i></div>
+
+  <!-- Карточка профиля -->
+  <main class="stage">
+    <section class="card" id="card">
+      <div class="avatar" id="avatar" role="img" aria-label="Аватар"></div>
+      <h1 class="name" id="name"></h1>
+      <p class="bio"><span id="bioText"></span><span class="caret" aria-hidden="true"></span></p>
+      <nav class="links icons" id="links" aria-label="Соцсети"></nav>
+      <div class="player" id="player" hidden>
+        <div class="p-top">
+          <div class="cover" id="pCover" aria-hidden="true">♪</div>
+          <div class="p-info"><span class="p-title" id="pTitle"></span><span class="p-artist" id="pArtist"></span></div>
+          <label class="p-vol" title="Громкость">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9.5v5h3.5L12 18.5v-13L7.5 9.5zM16 9a4 4 0 0 1 0 6M18.5 6.5a8 8 0 0 1 0 11"/></svg>
+            <input id="pVol" type="range" min="0" max="100" value="60" aria-label="Громкость">
+          </label>
+        </div>
+        <div class="p-bar"><span id="pTime">0:00</span><input id="pSeek" type="range" min="0" max="1000" value="0" aria-label="Перемотка"><span id="pDur">0:00</span></div>
+        <div class="p-ctl">
+          <button id="pPrev" type="button" aria-label="Предыдущий трек"></button>
+          <button id="pPlay" type="button" aria-label="Играть"></button>
+          <button id="pNext" type="button" aria-label="Следующий трек"></button>
+        </div>
+        <ul class="p-list" id="pList" hidden></ul>
+      </div>
+      <audio id="audio" preload="metadata"></audio>
+      <p class="views" id="views"></p>
+    </section>
+  </main>
+
+  <button class="gear" id="gear" type="button" aria-label="Настройки страницы">⚙</button>
+
+  <!-- Панель настроек -->
+  <aside class="panel" id="panel" hidden aria-label="Настройки">
+    <div class="panel-head">
+      <h2>Настройки</h2>
+      <button class="x" id="closePanel" type="button" aria-label="Закрыть">✕</button>
+    </div>
+
+    <h3>Профиль</h3>
+    <label class="f">Имя
+      <input id="pName" type="text" maxlength="40">
+    </label>
+    <label class="f">Подпись (каждая строка печатается по очереди)
+      <textarea id="pBio" rows="3" maxlength="400"></textarea>
+    </label>
+    <label class="f">Аватар: ссылка на картинку
+      <input id="pAvatarUrl" type="text" placeholder="https://... или avatar.png">
+    </label>
+    <div class="btns">
+      <button class="b" id="pAvatarPick" type="button">Загрузить аватар</button>
+      <button class="b" id="pAvatarClear" type="button">Убрать</button>
+      <input id="pAvatarFile" type="file" accept="image/*" hidden>
+    </div>
+
+    <h3>Оформление</h3>
+    <label class="f">Фон
+      <select id="pBgType">
+        <option value="video">Видео</option>
+        <option value="gradient">Градиент</option>
+        <option value="image">Картинка</option>
+      </select>
+    </label>
+    <div class="two">
+      <label class="f">Цвет 1 <input id="pC1" type="color"></label>
+      <label class="f">Цвет 2 <input id="pC2" type="color"></label>
+    </div>
+    <label class="f" id="bgUrlRow">Фон: ссылка на картинку
+      <input id="pBgUrl" type="url" placeholder="https://...">
+    </label>
+    <div class="btns" id="bgFileRow">
+      <button class="b" id="pBgPick" type="button">Загрузить фон</button>
+      <input id="pBgFile" type="file" accept="image/*" hidden>
+    </div>
+    <label class="f">Акцентный цвет <input id="pAccent" type="color"></label>
+    <label class="f">Размытие карточки <input id="pBlur" type="range" min="0" max="30"></label>
+    <label class="f">Плотность карточки <input id="pAlpha" type="range" min="0" max="90"></label>
+    <label class="chk"><input id="pGlow" type="checkbox"> Свечение карточки и аватарки</label>
+    <label class="f">Цвет свечения <input id="pGlowColor" type="color"></label>
+    <label class="f">Сила свечения <input id="pGlowSize" type="range" min="0" max="40"></label>
+    <label class="chk"><input id="pPulse" type="checkbox"> Пульсация свечения ника</label>
+    <label class="chk"><input id="pType" type="checkbox"> Печатающаяся подпись</label>
+    <label class="f">Вид ссылок
+      <select id="pLayout">
+        <option value="icons">Иконки</option>
+        <option value="buttons">Кнопки с подписью</option>
+      </select>
+    </label>
+
+    <h3>Текст</h3>
+    <label class="f">Ник: толщина <select id="pNameWeight"></select></label>
+    <label class="chk"><input id="pNameGlow" type="checkbox"> Свечение ника</label>
+    <label class="f">Описание: толщина <select id="pBioWeight"></select></label>
+    <label class="chk"><input id="pBioGlow" type="checkbox"> Свечение описания</label>
+
+    <h3>Ссылки</h3>
+    <div id="linkList" class="link-list"></div>
+    <button class="b wide" id="addLink" type="button">Добавить ссылку</button>
+
+    <h3>Данные</h3>
+    <div class="btns">
+      <button class="b" id="exportBtn" type="button">Экспорт JSON</button>
+      <button class="b" id="importBtn" type="button">Импорт JSON</button>
+      <button class="b danger" id="resetBtn" type="button">Сбросить всё</button>
+      <input id="importFile" type="file" accept="application/json,.json" hidden>
+    </div>
+    <p class="note">Изменения сохраняются в этом браузере автоматически.</p>
+  </aside>
+
+  <button class="enter" id="enter" type="button" hidden>Нажмите, чтобы войти</button>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <script src="app.js"></script>
+</body>
+</html>
